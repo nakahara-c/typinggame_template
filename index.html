@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--ここからtwitter card
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:domain" content="hogehoge.com">
+    <meta name="twitter:site" content="@tt_cocoan">
+    <meta name="twitter:title" content="hogehoge typing">
+    <meta name="twitter:description" content="this is my hogehoge.">
+    <meta name="twitter:image" content="/hoge.png">
+    ここまでtwitter card-->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+    <style>
+        #title {
+            opacity:1.0;
+        }
+        .hero-body {
+            background-color:aliceblue
+        }
+        #tweet {
+            background-color: #1d9bf0;
+            color:#FFFFFF;
+        }
+
+        .keys {
+            font-size:5em;
+        }
+    </style>
+
+    <title>ほげほげたいぴんぐ</title>
+</head>
+
+<body>
+
+    <section class="hero d">
+        <div class="hero-body">
+            <div class="container">
+                <h1 id="title" class="title is-2 has-text-centered">
+                    ほげほげたいぴんぐ
+                </h1>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="section">
+        <div class="container is-fluid tile is-ancestor">
+            <div class="tile is-parent is-4 container">
+                <div id="area" class="is-relative mx-auto">
+
+                    <!--打ったキー表示するとこ-->
+                    <div id="pressedKeys" class="content is-child box column is-full has-text-centered">
+
+                        <div id="key1" class="keys" style="font-size:5em;">&nbsp;</div>
+                        <div id="key2" class="keys" style="font-size:5em;">&nbsp;</div>
+                        <div id="key3" class="keys" style="font-size:5em;">&nbsp;</div>
+                        <div id="key4" class="keys" style="font-size:5em;">&nbsp;</div>
+                        <div id="key5" class="keys" style="font-size:5em;">&nbsp;</div>
+
+
+                    </div>
+
+                    <!--スコアとか時間とかのとこ-->
+                    <div id="info" class="content is-child box column is-full has-text-centered">
+
+                        <progress id="progress" class="progress is-large is-success" max="100"></progress>
+
+                        <p class="mx-6">
+                            TIME:<span id="timer" style="font-size:2em" class="has-text-danger">0.0</span>秒
+                        </p>
+
+                        <p class="mx-6">
+                            SCORE:<span id="score" style="font-size:2em" class="has-text-danger">0</span>てん<br>
+                        </p>
+
+                        <a class="button mx-6" target="_blank" id="tweet" 
+                        href="https://twitter.com/intent/tweet?ref_src=twsrc&hashtags=はっしゅたぐ&url=http://hogehoge.com">
+                        ツイート</a>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <footer class="footer py-6">
+    </footer>
+
+    <script>
+
+        main();
+
+        let testObj = {
+            score: 100,
+            time: 10
+        }
+        makeTweet(testObj);
+
+
+        function main () {
+
+            const pressedKeys = document.querySelectorAll('.keys');
+            let isDisplay = new Array(pressedKeys.length).fill(false);
+            let keyPressed = new Object();
+
+            //キーを押したときの処理
+            window.addEventListener('keydown', (e) => {
+                console.log(`${e.key}が押されました`);
+
+                //キーを押しっぱなしかのフラグ管理
+                if (!keyPressed[e.key]) {
+                    keyPressed[e.key] = true;
+
+                    //画面更新の処理
+                    for (let i = 0; i < pressedKeys.length; i++) {
+
+                        if (isDisplay[i] === false) {
+                            pressedKeys[i].textContent = e.key;
+                            isDisplay[i] = true;
+                            break;
+                        }
+
+                    }
+                }
+
+
+
+            })
+
+            //キーを離したときの処理
+            window.addEventListener('keyup', (e) => {
+                console.log(`${e.key}が離されました`);
+
+                keyPressed[e.key] = false;
+
+                for (let i = 0; i < pressedKeys.length; i++) {
+
+                    if (pressedKeys[i].textContent === e.key) {
+                        pressedKeys[i].textContent = ' ';
+                        isDisplay[i] = false;
+                        break;
+                    }
+
+                }
+
+            })
+        }
+
+        //objectを渡す
+        function makeTweet (info) {
+
+            const tweetButton = document.getElementById('tweet');
+            
+            //objectの中身を取り出す
+            const s = info.score;
+        
+            const hashTags = "ほげほげたいぴんぐ";
+
+            const tweetText = `
+            ${s}てんでほげほげたいぴんぐしました！
+            `;
+
+            const url = 'http://hoge.com/index.html';
+            const tweetURL = `https://twitter.com/intent/tweet?ref_src=twsrc&text=${tweetText}&hashtags=${hashTags}&url=${url}`;
+            
+            tweetButton.href = tweetURL;
+        
+        }
+
+    </script>
+
+
+</body>
+
+</html>
